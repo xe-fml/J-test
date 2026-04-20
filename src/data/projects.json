@@ -1,0 +1,372 @@
+[
+  {
+    "id": 1,
+    "title": "购物车分析",
+    "description": "分析电商平台用户购物车数据，识别购买模式和行为趋势",
+    "learningObjectives": [
+      "掌握pandas数据清洗和预处理",
+      "学习使用pandas进行数据聚合和分组",
+      "分析用户购买行为和购物车放弃率",
+      "生成可视化报告展示分析结果"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和清洗",
+        "content": "使用pandas读取CSV文件，处理缺失值和异常值",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('shopping_cart_data.csv')\n\n# 处理缺失值\ndf = df.dropna()\n\n# 转换数据类型\ndf['timestamp'] = pd.to_datetime(df['timestamp'])"
+      },
+      {
+        "step": 2,
+        "title": "数据探索和分析",
+        "content": "分析购物车商品分布、用户购买频率和购物车放弃率",
+        "code": "# 分析购物车商品数量分布\ncart_size_distribution = df.groupby('user_id')['product_id'].count().value_counts()\n\n# 计算购物车放弃率\nabandoned_carts = df[df['purchase_completed'] == False].shape[0]\ntotal_carts = df.shape[0]\nabandonment_rate = abandoned_carts / total_carts\nprint(f'购物车放弃率: {abandonment_rate:.2f}')"
+      },
+      {
+        "step": 3,
+        "title": "用户行为分析",
+        "content": "分析用户购买行为模式，识别高价值用户",
+        "code": "# 计算每个用户的总消费\nuser_spending = df[df['purchase_completed'] == True].groupby('user_id')['price'].sum()\n\n# 识别高价值用户（消费前10%）\nhigh_value_threshold = user_spending.quantile(0.9)\nhigh_value_users = user_spending[user_spending >= high_value_threshold]\nprint(f'高价值用户数量: {len(high_value_users)}')"
+      },
+      {
+        "step": 4,
+        "title": "结果可视化",
+        "content": "使用matplotlib和seaborn创建可视化图表",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 购物车放弃率可视化\nsns.countplot(x='purchase_completed', data=df)\nplt.title('购物车完成情况')\nplt.show()\n\n# 用户消费分布\nsns.histplot(user_spending, bins=20)\nplt.title('用户消费分布')\nplt.xlabel('消费金额')\nplt.ylabel('用户数量')\nplt.show()"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "客户分群分析",
+    "description": "使用聚类算法对客户进行分群，识别不同客户群体的特征",
+    "learningObjectives": [
+      "学习使用pandas进行数据预处理和特征工程",
+      "掌握K-means聚类算法的应用",
+      "分析不同客户群体的特征和行为模式",
+      "制定针对不同客户群体的营销策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据预处理和特征工程",
+        "content": "准备客户数据，选择合适的特征进行聚类",
+        "code": "import pandas as pd\nfrom sklearn.preprocessing import StandardScaler\n\n# 读取数据\ndf = pd.read_csv('customer_data.csv')\n\n# 选择特征\nfeatures = ['age', 'annual_income', 'spending_score', 'purchase_frequency']\nX = df[features]\n\n# 数据标准化\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)"
+      },
+      {
+        "step": 2,
+        "title": "K-means聚类",
+        "content": "使用K-means算法对客户进行分群",
+        "code": "from sklearn.cluster import KMeans\nimport matplotlib.pyplot as plt\n\n# 确定最佳聚类数\ninertia = []\nfor k in range(1, 11):\n    kmeans = KMeans(n_clusters=k, random_state=42)\n    kmeans.fit(X_scaled)\n    inertia.append(kmeans.inertia_)\n\n# 绘制 elbow 曲线\nplt.plot(range(1, 11), inertia)\nplt.title('Elbow Method')\nplt.xlabel('Number of clusters')\nplt.ylabel('Inertia')\nplt.show()\n\n# 执行K-means聚类（选择最佳k值）\nkmeans = KMeans(n_clusters=4, random_state=42)\ndf['cluster'] = kmeans.fit_predict(X_scaled)"
+      },
+      {
+        "step": 3,
+        "title": "聚类结果分析",
+        "content": "分析每个客户群体的特征和行为模式",
+        "code": "# 分析每个聚类的特征\ncluster_analysis = df.groupby('cluster')[features].mean()\nprint(cluster_analysis)\n\n# 分析每个聚类的大小\ncluster_size = df['cluster'].value_counts()\nprint('\n聚类大小:')\nprint(cluster_size)"
+      },
+      {
+        "step": 4,
+        "title": "结果可视化",
+        "content": "使用散点图可视化聚类结果",
+        "code": "import seaborn as sns\n\n# 可视化聚类结果（年龄 vs 消费分数）\nsns.scatterplot(x='age', y='spending_score', hue='cluster', data=df, palette='viridis')\nplt.title('客户分群（年龄 vs 消费分数）')\nplt.show()\n\n# 可视化聚类结果（年收入 vs 消费分数）\nsns.scatterplot(x='annual_income', y='spending_score', hue='cluster', data=df, palette='viridis')\nplt.title('客户分群（年收入 vs 消费分数）')\nplt.show()"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "销售数据分析",
+    "description": "分析销售数据，识别销售趋势、季节性模式和产品表现",
+    "learningObjectives": [
+      "掌握时间序列数据处理和分析",
+      "学习使用pandas进行销售数据分析",
+      "识别销售趋势和季节性模式",
+      "分析产品表现和销售预测"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取销售数据，处理时间序列数据",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('sales_data.csv')\n\n# 处理时间序列数据\ndf['date'] = pd.to_datetime(df['date'])\ndf.set_index('date', inplace=True)\n\n# 按月份汇总销售数据\nmonthly_sales = df.resample('M').sum()\nprint(monthly_sales.head())"
+      },
+      {
+        "step": 2,
+        "title": "销售趋势分析",
+        "content": "分析销售趋势和季节性模式",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 绘制销售趋势图\nplt.figure(figsize=(12, 6))\nplt.plot(monthly_sales['sales'], marker='o')\nplt.title('月度销售趋势')\nplt.xlabel('日期')\nplt.ylabel('销售额')\nplt.grid(True)\nplt.show()\n\n# 分析产品销售表现\nproduct_sales = df.groupby('product_id')['sales'].sum().sort_values(ascending=False)\nprint('产品销售排名:')\nprint(product_sales.head(10))"
+      },
+      {
+        "step": 3,
+        "title": "季节性分析",
+        "content": "分析销售数据的季节性模式",
+        "code": "# 提取月份和季度信息\ndf['month'] = df.index.month\ndf['quarter'] = df.index.quarter\n\n# 分析月度销售模式\nmonthly_pattern = df.groupby('month')['sales'].mean()\nprint('月度销售模式:')\nprint(monthly_pattern)\n\n# 分析季度销售模式\nquarterly_pattern = df.groupby('quarter')['sales'].mean()\nprint('\n季度销售模式:')\nprint(quarterly_pattern)"
+      },
+      {
+        "step": 4,
+        "title": "销售预测",
+        "content": "使用简单移动平均法进行销售预测",
+        "code": "# 计算3个月移动平均\nmonthly_sales['3ma'] = monthly_sales['sales'].rolling(window=3).mean()\n\n# 绘制移动平均趋势\nplt.figure(figsize=(12, 6))\nplt.plot(monthly_sales['sales'], label='实际销售额')\nplt.plot(monthly_sales['3ma'], label='3个月移动平均')\nplt.title('销售趋势和移动平均')\nplt.xlabel('日期')\nplt.ylabel('销售额')\nplt.legend()\nplt.grid(True)\nplt.show()"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "库存优化分析",
+    "description": "分析库存数据，优化库存水平，减少库存成本",
+    "learningObjectives": [
+      "掌握库存数据分析方法",
+      "学习使用pandas进行库存周转率分析",
+      "识别库存积压和短缺情况",
+      "制定库存优化策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取库存数据，处理数据格式",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('inventory_data.csv')\n\n# 处理日期数据\ndf['date'] = pd.to_datetime(df['date'])\n\n# 计算库存周转率\ndf['inventory_turnover'] = df['sales'] / df['average_inventory']\nprint(df.head())"
+      },
+      {
+        "step": 2,
+        "title": "库存水平分析",
+        "content": "分析库存水平和库存周转率",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 分析库存周转率分布\nsns.histplot(df['inventory_turnover'], bins=20)\nplt.title('库存周转率分布')\nplt.xlabel('库存周转率')\nplt.ylabel('产品数量')\nplt.show()\n\n# 识别库存积压产品（周转率低）\noverstocked_products = df[df['inventory_turnover'] < 1]\nprint(f'库存积压产品数量: {len(overstocked_products)}')\nprint('库存积压产品:')\nprint(overstocked_products[['product_id', 'inventory_turnover']].head())"
+      },
+      {
+        "step": 3,
+        "title": "库存短缺分析",
+        "content": "分析库存短缺情况和影响",
+        "code": "# 识别库存短缺产品\nstockout_products = df[df['stockout_days'] > 0]\nprint(f'库存短缺产品数量: {len(stockout_products)}')\nprint('库存短缺产品:')\nprint(stockout_products[['product_id', 'stockout_days', 'lost_sales']].head())\n\n# 计算库存短缺造成的损失\ntotal_lost_sales = stockout_products['lost_sales'].sum()\nprint(f'\n库存短缺造成的总损失: {total_lost_sales:.2f}')"
+      },
+      {
+        "step": 4,
+        "title": "库存优化建议",
+        "content": "基于分析结果提出库存优化建议",
+        "code": "# 分析不同产品类别的库存周转率\ncategory_turnover = df.groupby('product_category')['inventory_turnover'].mean().sort_values()\nprint('各产品类别库存周转率:')\nprint(category_turnover)\n\n# 计算安全库存水平\ndf['safety_stock'] = df['daily_demand_std'] * 1.645  # 95% 置信水平\nprint('\n安全库存水平:')\nprint(df[['product_id', 'safety_stock']].head())"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "用户流失分析",
+    "description": "分析用户流失数据，识别流失原因和预防策略",
+    "learningObjectives": [
+      "掌握用户流失数据分析方法",
+      "学习使用pandas进行用户行为分析",
+      "识别影响用户流失的关键因素",
+      "制定用户留存策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取用户数据，处理流失标签",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('customer_churn_data.csv')\n\n# 处理流失标签\ndf['churn'] = df['churn'].map({'Yes': 1, 'No': 0})\n\n# 计算流失率\nchurn_rate = df['churn'].mean()\nprint(f'用户流失率: {churn_rate:.2f}')"
+      },
+      {
+        "step": 2,
+        "title": "用户行为分析",
+        "content": "分析流失用户和留存用户的行为差异",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 分析流失用户和留存用户的月度消费\nsns.boxplot(x='churn', y='monthly_charges', data=df)\nplt.title('流失用户 vs 留存用户的月度消费')\nplt.xticks([0, 1], ['留存', '流失'])\nplt.show()\n\n# 分析流失用户和留存用户的合约类型\ncontract_churn = df.groupby('contract_type')['churn'].mean()\nprint('不同合约类型的流失率:')\nprint(contract_churn)"
+      },
+      {
+        "step": 3,
+        "title": "影响因素分析",
+        "content": "识别影响用户流失的关键因素",
+        "code": "# 分析各因素与流失的相关性\ncorrelation = df.corr()['churn'].sort_values(ascending=False)\nprint('因素与流失的相关性:')\nprint(correlation.head(10))\n\n# 分析用户使用时长与流失的关系\ndf['tenure_group'] = pd.cut(df['tenure'], bins=[0, 6, 12, 24, 36, 60], labels=['0-6个月', '6-12个月', '1-2年', '2-3年', '3年以上'])\ntenure_churn = df.groupby('tenure_group')['churn'].mean()\nprint('\n不同使用时长的流失率:')\nprint(tenure_churn)"
+      },
+      {
+        "step": 4,
+        "title": "用户留存策略",
+        "content": "基于分析结果提出用户留存策略",
+        "code": "# 识别高风险用户群体\nhigh_risk_users = df[(df['tenure'] < 6) & (df['monthly_charges'] > df['monthly_charges'].median())]\nprint(f'高风险用户数量: {len(high_risk_users)}')\nprint('高风险用户特征:')\nprint(high_risk_users[['tenure', 'monthly_charges', 'contract_type']].head())\n\n# 计算用户生命周期价值\ndf['customer_lifetime_value'] = df['monthly_charges'] * 12 * df['tenure']\nhigh_value_customers = df[df['customer_lifetime_value'] > df['customer_lifetime_value'].quantile(0.75)]\nprint('\n高价值客户流失率:')\nprint(high_value_customers['churn'].mean())"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "市场趋势分析",
+    "description": "分析市场数据，识别市场趋势和竞争格局",
+    "learningObjectives": [
+      "掌握市场数据分析方法",
+      "学习使用pandas进行市场趋势分析",
+      "识别市场机会和威胁",
+      "制定市场策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取市场数据，处理时间序列数据",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('market_trends_data.csv')\n\n# 处理日期数据\ndf['date'] = pd.to_datetime(df['date'])\ndf.set_index('date', inplace=True)\n\n# 按季度汇总市场数据\nquarterly_data = df.resample('Q').sum()\nprint(quarterly_data.head())"
+      },
+      {
+        "step": 2,
+        "title": "市场趋势分析",
+        "content": "分析市场规模和增长趋势",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 绘制市场规模趋势\nplt.figure(figsize=(12, 6))\nplt.plot(df['market_size'], marker='o')\nplt.title('市场规模趋势')\nplt.xlabel('日期')\nplt.ylabel('市场规模')\nplt.grid(True)\nplt.show()\n\n# 计算市场增长率\ndf['market_growth_rate'] = df['market_size'].pct_change() * 100\nprint('市场增长率:')\nprint(df['market_growth_rate'].head())"
+      },
+      {
+        "step": 3,
+        "title": "竞争格局分析",
+        "content": "分析市场竞争格局和市场份额",
+        "code": "# 分析各竞争对手市场份额\nmarket_share = df.groupby('competitor')['sales'].sum() / df['sales'].sum() * 100\nprint('市场份额:')\nprint(market_share.sort_values(ascending=False))\n\n# 分析竞争对手增长趋势\ncompetitor_growth = df.pivot_table(index='date', columns='competitor', values='sales')\nprint('\n竞争对手销售趋势:')\nprint(competitor_growth.head())"
+      },
+      {
+        "step": 4,
+        "title": "市场机会识别",
+        "content": "基于分析结果识别市场机会",
+        "code": "# 分析不同产品类别的市场表现\ncategory_performance = df.groupby('product_category')['sales'].sum().sort_values(ascending=False)\nprint('产品类别销售表现:')\nprint(category_performance)\n\n# 分析不同地区的市场潜力\nregional_potential = df.groupby('region')['market_size'].mean().sort_values(ascending=False)\nprint('\n各地区市场潜力:')\nprint(regional_potential)"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "财务数据分析",
+    "description": "分析财务数据，评估企业财务状况和盈利能力",
+    "learningObjectives": [
+      "掌握财务数据分析方法",
+      "学习使用pandas进行财务比率分析",
+      "评估企业财务健康状况",
+      "识别财务风险和机会"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取财务数据，处理财务指标",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('financial_data.csv')\n\n# 计算财务比率\ndf['current_ratio'] = df['current_assets'] / df['current_liabilities']\ndf['debt_to_equity'] = df['total_debt'] / df['total_equity']\ndf['profit_margin'] = df['net_income'] / df['revenue'] * 100\nprint(df.head())"
+      },
+      {
+        "step": 2,
+        "title": "财务健康状况分析",
+        "content": "分析企业财务健康状况和盈利能力",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 分析流动比率趋势\nplt.figure(figsize=(12, 6))\nplt.plot(df['year'], df['current_ratio'], marker='o')\nplt.title('流动比率趋势')\nplt.xlabel('年份')\nplt.ylabel('流动比率')\nplt.axhline(y=1, color='r', linestyle='--')\nplt.grid(True)\nplt.show()\n\n# 分析利润率趋势\nplt.figure(figsize=(12, 6))\nplt.plot(df['year'], df['profit_margin'], marker='o')\nplt.title('利润率趋势')\nplt.xlabel('年份')\nplt.ylabel('利润率(%)')\nplt.grid(True)\nplt.show()"
+      },
+      {
+        "step": 3,
+        "title": "财务风险分析",
+        "content": "分析企业财务风险和偿债能力",
+        "code": "# 分析资产负债率趋势\ndf['debt_ratio'] = df['total_debt'] / df['total_assets'] * 100\nplt.figure(figsize=(12, 6))\nplt.plot(df['year'], df['debt_ratio'], marker='o')\nplt.title('资产负债率趋势')\nplt.xlabel('年份')\nplt.ylabel('资产负债率(%)')\nplt.grid(True)\nplt.show()\n\n# 分析利息保障倍数\ndf['interest_coverage'] = df['ebit'] / df['interest_expense']\nprint('利息保障倍数:')\nprint(df[['year', 'interest_coverage']])"
+      },
+      {
+        "step": 4,
+        "title": "财务预测",
+        "content": "基于历史数据进行财务预测",
+        "code": "# 简单线性回归预测收入\nfrom sklearn.linear_model import LinearRegression\nimport numpy as np\n\n# 准备数据\nx = df['year'].values.reshape(-1, 1)\ny = df['revenue'].values\n\n# 拟合模型\nmodel = LinearRegression()\nmodel.fit(x, y)\n\n# 预测未来两年收入\nfuture_years = np.array([[2024], [2025]])\npredicted_revenue = model.predict(future_years)\nprint('预测未来收入:')\nprint(f'2024年: {predicted_revenue[0]:.2f}')\nprint(f'2025年: {predicted_revenue[1]:.2f}')"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "社交媒体数据分析",
+    "description": "分析社交媒体数据，评估品牌影响力和用户engagement",
+    "learningObjectives": [
+      "掌握社交媒体数据分析方法",
+      "学习使用pandas进行用户engagement分析",
+      "评估品牌影响力和内容表现",
+      "制定社交媒体营销策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取社交媒体数据，处理engagement指标",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('social_media_data.csv')\n\n# 处理日期数据\ndf['date'] = pd.to_datetime(df['date'])\n\n# 计算engagement率\ndf['engagement_rate'] = (df['likes'] + df['comments'] + df['shares']) / df['impressions'] * 100\nprint(df.head())"
+      },
+      {
+        "step": 2,
+        "title": "内容表现分析",
+        "content": "分析不同类型内容的表现",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 分析不同内容类型的engagement率\ncontent_engagement = df.groupby('content_type')['engagement_rate'].mean().sort_values(ascending=False)\nprint('不同内容类型的平均engagement率:')\nprint(content_engagement)\n\n# 可视化内容类型表现\nsns.barplot(x=content_engagement.index, y=content_engagement.values)\nplt.title('不同内容类型的Engagement率')\nplt.xticks(rotation=45)\nplt.ylabel('Engagement率(%)')\nplt.show()"
+      },
+      {
+        "step": 3,
+        "title": "时间趋势分析",
+        "content": "分析社交媒体表现的时间趋势",
+        "code": "# 按月份汇总engagement数据\nmonthly_engagement = df.resample('M', on='date')['engagement_rate'].mean()\nprint('月度平均engagement率:')\nprint(monthly_engagement)\n\n# 绘制engagement趋势图\nplt.figure(figsize=(12, 6))\nplt.plot(monthly_engagement.index, monthly_engagement.values, marker='o')\nplt.title('月度Engagement率趋势')\nplt.xlabel('日期')\nplt.ylabel('Engagement率(%)')\nplt.grid(True)\nplt.show()"
+      },
+      {
+        "step": 4,
+        "title": "受众分析",
+        "content": "分析受众特征和行为",
+        "code": "# 分析不同受众群体的engagement\naudience_engagement = df.groupby('audience_segment')['engagement_rate'].mean().sort_values(ascending=False)\nprint('不同受众群体的平均engagement率:')\nprint(audience_engagement)\n\n# 分析最佳发布时间\ndf['hour'] = df['date'].dt.hour\nhourly_engagement = df.groupby('hour')['engagement_rate'].mean()\nprint('\n不同发布时间的平均engagement率:')\nprint(hourly_engagement)\n\n# 可视化最佳发布时间\nplt.figure(figsize=(12, 6))\nplt.plot(hourly_engagement.index, hourly_engagement.values, marker='o')\nplt.title('不同发布时间的Engagement率')\nplt.xlabel('小时')\nplt.ylabel('Engagement率(%)')\nplt.grid(True)\nplt.show()"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "供应链数据分析",
+    "description": "分析供应链数据，优化供应链效率和成本",
+    "learningObjectives": [
+      "掌握供应链数据分析方法",
+      "学习使用pandas进行供应链效率分析",
+      "识别供应链瓶颈和优化机会",
+      "制定供应链优化策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取供应链数据，处理物流指标",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('supply_chain_data.csv')\n\n# 计算供应链指标\ndf['lead_time'] = (pd.to_datetime(df['delivery_date']) - pd.to_datetime(df['order_date'])).dt.days\ndf['on_time_delivery'] = (df['delivery_date'] <= df['expected_delivery_date']).astype(int)\ndf['cost_per_unit'] = df['total_cost'] / df['quantity']\nprint(df.head())"
+      },
+      {
+        "step": 2,
+        "title": "供应链效率分析",
+        "content": "分析供应链效率和交付表现",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 分析按时交付率\non_time_rate = df['on_time_delivery'].mean() * 100\nprint(f'按时交付率: {on_time_rate:.2f}%')\n\n# 分析供应商表现\nsupplier_performance = df.groupby('supplier')['on_time_delivery'].mean().sort_values(ascending=False)\nprint('供应商按时交付率:')\nprint(supplier_performance)\n\n# 分析前置时间分布\nsns.histplot(df['lead_time'], bins=20)\nplt.title('前置时间分布')\nplt.xlabel('前置时间(天)')\nplt.ylabel('订单数量')\nplt.show()"
+      },
+      {
+        "step": 3,
+        "title": "成本分析",
+        "content": "分析供应链成本结构和优化机会",
+        "code": "# 分析成本结构\ncost_breakdown = df.groupby('cost_category')['total_cost'].sum()\nprint('成本结构:')\nprint(cost_breakdown)\n\n# 可视化成本结构\nplt.figure(figsize=(10, 6))\nplt.pie(cost_breakdown, labels=cost_breakdown.index, autopct='%1.1f%%')\nplt.title('供应链成本结构')\nplt.show()\n\n# 分析单位成本趋势\ndf['order_date'] = pd.to_datetime(df['order_date'])\nmonthly_unit_cost = df.resample('M', on='order_date')['cost_per_unit'].mean()\nprint('月度单位成本趋势:')\nprint(monthly_unit_cost)"
+      },
+      {
+        "step": 4,
+        "title": "供应链优化建议",
+        "content": "基于分析结果提出供应链优化建议",
+        "code": "# 识别高成本供应商\nhigh_cost_suppliers = df.groupby('supplier')['cost_per_unit'].mean().sort_values(ascending=False).head(5)\nprint('高成本供应商:')\nprint(high_cost_suppliers)\n\n# 识别长前置时间供应商\nlong_lead_time_suppliers = df.groupby('supplier')['lead_time'].mean().sort_values(ascending=False).head(5)\nprint('\n长前置时间供应商:')\nprint(long_lead_time_suppliers)\n\n# 分析库存水平与订单频率的关系\norder_frequency = df.groupby('product_id').size()\naverage_inventory = df.groupby('product_id')['inventory_level'].mean()\ninventory_order_correlation = order_frequency.corr(average_inventory)\nprint(f'\n库存水平与订单频率的相关性: {inventory_order_correlation:.2f}')"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "医疗数据分析",
+    "description": "分析医疗数据，识别疾病模式和治疗效果",
+    "learningObjectives": [
+      "掌握医疗数据分析方法",
+      "学习使用pandas进行患者数据管理",
+      "识别疾病模式和治疗效果",
+      "制定医疗决策支持策略"
+    ],
+    "materials": [
+      {
+        "step": 1,
+        "title": "数据导入和预处理",
+        "content": "读取医疗数据，处理患者信息",
+        "code": "import pandas as pd\n\n# 读取数据\ndf = pd.read_csv('medical_data.csv')\n\n# 处理日期数据\ndf['admission_date'] = pd.to_datetime(df['admission_date'])\ndf['discharge_date'] = pd.to_datetime(df['discharge_date'])\n\n# 计算住院天数\ndf['length_of_stay'] = (df['discharge_date'] - df['admission_date']).dt.days\nprint(df.head())"
+      },
+      {
+        "step": 2,
+        "title": "患者人口统计分析",
+        "content": "分析患者人口统计特征和疾病分布",
+        "code": "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n# 分析患者年龄分布\nsns.histplot(df['age'], bins=20)\nplt.title('患者年龄分布')\nplt.xlabel('年龄')\nplt.ylabel('患者数量')\nplt.show()\n\n# 分析疾病分布\ndisease_distribution = df['diagnosis'].value_counts().head(10)\nprint('常见疾病分布:')\nprint(disease_distribution)\n\n# 可视化疾病分布\nplt.figure(figsize=(12, 6))\nsns.barplot(x=disease_distribution.index, y=disease_distribution.values)\nplt.title('常见疾病分布')\nplt.xticks(rotation=45)\nplt.ylabel('患者数量')\nplt.show()"
+      },
+      {
+        "step": 3,
+        "title": "治疗效果分析",
+        "content": "分析不同治疗方案的效果",
+        "code": "# 分析治疗效果\ntreatment_outcome = df.groupby('treatment')['outcome'].value_counts(normalize=True).unstack()\nprint('不同治疗方案的效果:')\nprint(treatment_outcome)\n\n# 分析住院时间与治疗效果的关系\noutcome_stay = df.groupby('outcome')['length_of_stay'].mean()\nprint('\n不同治疗效果的平均住院时间:')\nprint(outcome_stay)\n\n# 分析年龄与治疗效果的关系\nage_groups = pd.cut(df['age'], bins=[0, 30, 60, 90], labels=['0-30岁', '31-60岁', '61-90岁'])\nage_outcome = df.groupby(age_groups)['outcome'].value_counts(normalize=True).unstack()\nprint('\n不同年龄组的治疗效果:')\nprint(age_outcome)"
+      },
+      {
+        "step": 4,
+        "title": "医疗资源利用分析",
+        "content": "分析医疗资源利用情况和优化机会",
+        "code": "# 分析医院资源利用\nhospital_utilization = df.groupby('hospital')['length_of_stay'].mean()\nprint('各医院平均住院时间:')\nprint(hospital_utilization)\n\n# 分析科室资源利用\ndepartment_utilization = df.groupby('department')['length_of_stay'].mean()\nprint('\n各科室平均住院时间:')\nprint(department_utilization)\n\n# 识别高资源消耗患者\nhigh_resource_patients = df[df['length_of_stay'] > df['length_of_stay'].quantile(0.9)]\nprint(f'\n高资源消耗患者数量: {len(high_resource_patients)}')\nprint('高资源消耗患者特征:')\nprint(high_resource_patients[['age', 'diagnosis', 'treatment', 'length_of_stay']].head())"
+      }
+    ]
+  }
+]

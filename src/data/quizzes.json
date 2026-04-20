@@ -1,0 +1,1342 @@
+[
+  {
+    "projectId": 1,
+    "projectTitle": "购物车分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "在使用pandas处理购物车数据时，以下哪种方法最适合处理缺失值？",
+        "options": [
+          "使用df.dropna()删除所有包含缺失值的行",
+          "使用df.fillna(0)将所有缺失值填充为0",
+          "使用df.interpolate()进行插值填充",
+          "根据数据类型和业务逻辑选择合适的填充方法"
+        ],
+        "correctAnswer": 3,
+        "explanation": "处理缺失值的最佳方法取决于数据类型和业务逻辑。例如，对于数值型数据可能使用平均值填充，对于分类数据可能使用众数填充，而对于某些情况可能需要删除包含缺失值的行。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算购物车放弃率，但存在错误。请找出并修正：\n\n```python\nabandoned_carts = df[df['purchase_completed'] == False].shape[0]\ntotal_carts = df.shape[0]\nabandonment_rate = total_carts / abandoned_carts\nprint(f'购物车放弃率: {abandonment_rate:.2f}')\n```",
+        "correctAnswer": "abandonment_rate = abandoned_carts / total_carts",
+        "explanation": "购物车放弃率应该是放弃的购物车数量除以总购物车数量，而不是总购物车数量除以放弃的购物车数量。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你正在分析一个电商平台的购物车数据，发现购物车放弃率高达70%。作为数据分析师，你应该首先关注什么？",
+        "options": [
+          "立即实施促销活动降低放弃率",
+          "分析用户放弃购物车的时间点和原因",
+          "优化网站加载速度",
+          "增加更多支付方式"
+        ],
+        "correctAnswer": 1,
+        "explanation": "在采取任何行动之前，首先应该分析用户放弃购物车的具体原因和时间点，这样才能制定有针对性的解决方案。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "你分析了购物车数据，发现以下结果：\n- 工作日的购物车放弃率为60%\n- 周末的购物车放弃率为40%\n\n这一结果说明了什么？",
+        "options": [
+          "用户在周末有更多时间完成购买",
+          "周末的促销活动更有效",
+          "网站在工作日性能更差",
+          "用户在工作日更冲动购物"
+        ],
+        "correctAnswer": 0,
+        "explanation": "周末用户通常有更多时间浏览和完成购买，因此购物车放弃率较低。这一发现可以帮助平台在工作日设计更简化的结账流程。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在分析购物车数据时，以下两种方法的主要区别是什么？\n1. df.groupby('user_id')['product_id'].count()\n2. df['user_id'].value_counts()",
+        "options": [
+          "方法1计算每个用户的购物车商品数量，方法2计算每个用户的购物车数量",
+          "方法1计算每个用户的购物车数量，方法2计算每个用户的购物车商品数量",
+          "两种方法结果相同",
+          "方法1按用户ID排序，方法2按出现次数排序"
+        ],
+        "correctAnswer": 0,
+        "explanation": "方法1使用groupby按用户ID分组，然后计算每个用户的商品数量，得到每个用户的购物车商品数量。方法2直接计算每个用户ID出现的次数，得到每个用户的购物车数量。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种方法可以最有效地识别高价值用户？",
+        "options": [
+          "按购买频率排序",
+          "按单次购买金额排序",
+          "按总消费金额排序",
+          "综合考虑购买频率、平均消费金额和消费总额"
+        ],
+        "correctAnswer": 3,
+        "explanation": "高价值用户的定义应该综合考虑多个维度，包括购买频率、平均消费金额和总消费总额，这样才能更全面地识别出对平台最有价值的用户。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于识别高价值用户，但存在错误。请找出并修正：\n\n```python\nuser_spending = df[df['purchase_completed'] == True].groupby('user_id')['price'].sum()\nhigh_value_threshold = user_spending.quantile(0.1)  # 前10%\nhigh_value_users = user_spending[user_spending >= high_value_threshold]\nprint(f'高价值用户数量: {len(high_value_users)}')\n```",
+        "correctAnswer": "high_value_threshold = user_spending.quantile(0.9)  # 前10%",
+        "explanation": "quantile(0.1)表示第10百分位，即最低的10%，而我们需要的是最高的10%，应该使用quantile(0.9)。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现购物车中商品数量越多，放弃率越高。作为数据分析师，你应该建议什么？",
+        "options": [
+          "限制购物车商品数量",
+          "为多件商品提供折扣",
+          "优化结账流程，减少步骤",
+          "B和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "商品数量越多，结账过程可能越复杂，用户可能会因为价格过高或流程繁琐而放弃。提供多件商品折扣和优化结账流程都可以降低放弃率。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析购物车数据后，你发现用户在添加商品后平均15分钟内完成购买的比例为40%，而超过30分钟的比例仅为10%。这说明什么？",
+        "options": [
+          "用户通常在短时间内完成购买决策",
+          "网站应该在用户添加商品后15分钟内发送提醒",
+          "结账流程可能在30分钟后出现问题",
+          "A和B都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "这一数据表明用户通常在添加商品后短时间内完成购买决策，因此网站可以在用户添加商品后15分钟内发送提醒，以提高转化率。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在分析购物车数据时，使用pandas的groupby和pivot_table有什么区别？",
+        "options": [
+          "groupby只能按一个维度分组，pivot_table可以按多个维度",
+          "groupby返回Series，pivot_table返回DataFrame",
+          "groupby适用于简单聚合，pivot_table适用于多维度分析",
+          "以上都对"
+        ],
+        "correctAnswer": 2,
+        "explanation": "groupby和pivot_table都可以按多个维度分组，都可以返回Series或DataFrame。主要区别是pivot_table更适合进行多维度的交叉分析，而groupby更适合简单的聚合操作。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 2,
+    "projectTitle": "客户分群分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "在使用K-means聚类算法前，为什么需要对数据进行标准化？",
+        "options": [
+          "为了减少计算时间",
+          "为了避免特征尺度不同导致的聚类偏差",
+          "为了提高聚类算法的准确性",
+          "B和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "数据标准化可以确保所有特征在相同的尺度上，避免尺度较大的特征对聚类结果产生过大影响，从而提高聚类算法的准确性。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于执行K-means聚类，但存在错误。请找出并修正：\n\n```python\nfrom sklearn.cluster import KMeans\n\nkmeans = KMeans(n_clusters=4)\ndf['cluster'] = kmeans.fit_predict(X)\nprint(kmeans.cluster_centers_)\n```",
+        "correctAnswer": "kmeans = KMeans(n_clusters=4, random_state=42)",
+        "explanation": "在使用K-means算法时，应该设置random_state参数以确保结果的可重复性。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你正在使用K-means算法对客户进行分群，如何确定最佳的聚类数量？",
+        "options": [
+          "根据业务需求确定",
+          "使用Elbow方法",
+          "使用 silhouette 分数",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "确定最佳聚类数量需要综合考虑业务需求、Elbow方法和silhouette分数等多种因素。业务需求决定了聚类的实际意义，Elbow方法和silhouette分数则从技术角度评估聚类质量。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "你使用K-means算法对客户进行分群，得到以下结果：\n- 聚类0：年龄较小，收入较低，消费分数低\n- 聚类1：年龄较大，收入较高，消费分数高\n- 聚类2：年龄中等，收入中等，消费分数高\n- 聚类3：年龄较小，收入较高，消费分数中等\n\n哪个聚类的客户最可能是平台的高价值客户？",
+        "options": [
+          "聚类0",
+          "聚类1",
+          "聚类2",
+          "聚类3"
+        ],
+        "correctAnswer": 1,
+        "explanation": "聚类1的客户年龄较大，收入较高，消费分数高，这些特征表明他们是平台的高价值客户，应该重点维护和服务。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "K-means聚类和层次聚类的主要区别是什么？",
+        "options": [
+          "K-means需要预先指定聚类数量，层次聚类不需要",
+          "K-means计算速度更快，层次聚类更准确",
+          "K-means适用于大型数据集，层次聚类适用于小型数据集",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "K-means需要预先指定聚类数量，计算速度快，适用于大型数据集。层次聚类不需要预先指定聚类数量，可以生成层次结构，但计算速度较慢，适用于小型数据集。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "在客户分群分析中，以下哪种特征最不适合作为聚类特征？",
+        "options": [
+          "年龄",
+          "年收入",
+          "消费频率",
+          "客户ID"
+        ],
+        "correctAnswer": 3,
+        "explanation": "客户ID是一个唯一标识符，不包含任何关于客户行为或特征的信息，因此不适合作为聚类特征。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析聚类结果，但存在错误。请找出并修正：\n\n```python\n# 分析每个聚类的特征\ncluster_analysis = df.groupby('cluster')[features].mean()\nprint(cluster_analysis)\n\n# 分析每个聚类的大小\ncluster_size = df['cluster'].count()\nprint('\n聚类大小:')\nprint(cluster_size)\n```",
+        "correctAnswer": "cluster_size = df['cluster'].value_counts()",
+        "explanation": "使用value_counts()可以计算每个聚类的大小，而count()只会计算非空值的数量。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现某个聚类的客户流失率很高，作为数据分析师，你应该建议什么？",
+        "options": [
+          "针对该聚类客户提供个性化优惠",
+          "分析该聚类客户的共同特征，找出流失原因",
+          "改进产品或服务以满足该聚类客户的需求",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "对于流失率高的客户聚类，应该采取综合措施：提供个性化优惠、分析流失原因、改进产品或服务，以提高客户留存率。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析客户分群结果后，你发现聚类2的客户平均购买频率是其他聚类的2倍，但平均消费金额较低。这说明什么？",
+        "options": [
+          "聚类2的客户是高频低消费用户",
+          "聚类2的客户对价格敏感",
+          "应该为聚类2的客户提供更多折扣和促销",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "聚类2的客户购买频率高但消费金额低，说明他们是高频低消费用户，可能对价格敏感，因此可以通过提供更多折扣和促销来提高他们的消费金额。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在客户分群分析中，使用pandas的groupby和agg函数与直接使用describe函数有什么区别？",
+        "options": [
+          "groupby+agg可以自定义聚合函数，describe只能计算固定的统计量",
+          "groupby+agg速度更快",
+          "describe可以提供更详细的统计信息",
+          "A和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "groupby+agg的优势在于可以自定义聚合函数，而describe的优势在于可以一次性提供多个统计量（如均值、标准差、分位数等）。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 3,
+    "projectTitle": "销售数据分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "在使用pandas处理时间序列销售数据时，以下哪种方法最适合按月份汇总数据？",
+        "options": [
+          "df.groupby(df['date'].dt.month).sum()",
+          "df.resample('M').sum()",
+          "df.groupby(pd.Grouper(key='date', freq='M')).sum()",
+          "B和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "df.resample('M').sum()和df.groupby(pd.Grouper(key='date', freq='M')).sum()都可以按月份汇总数据，前者更简洁，后者更灵活。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算销售增长率，但存在错误。请找出并修正：\n\n```python\ndf['sales_growth'] = df['sales'].pct_change()\nprint(df['sales_growth'].head())\n```",
+        "correctAnswer": "df['sales_growth'] = df['sales'].pct_change() * 100",
+        "explanation": "pct_change()返回的是小数形式的增长率，乘以100后转换为百分比形式，更便于阅读和理解。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现销售数据存在明显的季节性模式，作为数据分析师，你应该如何处理？",
+        "options": [
+          "使用移动平均法平滑数据",
+          "使用季节性分解方法分析趋势和季节性",
+          "针对不同季节制定不同的销售策略",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "对于具有季节性模式的销售数据，应该综合使用移动平均法平滑数据、季节性分解方法分析趋势和季节性，并针对不同季节制定不同的销售策略。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析销售数据后，你发现以下结果：\n- 第一季度销售额占全年的20%\n- 第二季度销售额占全年的25%\n- 第三季度销售额占全年的30%\n- 第四季度销售额占全年的25%\n\n这说明什么？",
+        "options": [
+          "第三季度是销售旺季",
+          "应该在第三季度增加库存和营销投入",
+          "第一季度是销售淡季，需要制定相应的促销策略",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "第三季度销售额占比最高，是销售旺季，应该增加库存和营销投入；第一季度销售额占比最低，是销售淡季，需要制定相应的促销策略。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在分析销售数据时，使用移动平均法和指数平滑法有什么区别？",
+        "options": [
+          "移动平均法对所有数据点给予相同权重，指数平滑法对近期数据给予更高权重",
+          "移动平均法计算更简单，指数平滑法更复杂",
+          "移动平均法适用于稳定的数据，指数平滑法适用于有趋势的数据",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "移动平均法对所有数据点给予相同权重，计算简单，适用于稳定的数据。指数平滑法对近期数据给予更高权重，计算更复杂，适用于有趋势的数据。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种方法最适合预测销售数据的长期趋势？",
+        "options": [
+          "简单移动平均",
+          "加权移动平均",
+          "线性回归",
+          "指数平滑"
+        ],
+        "correctAnswer": 2,
+        "explanation": "线性回归可以捕捉数据的长期趋势，适合用于长期销售预测。移动平均和指数平滑更适合短期预测和数据平滑。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析产品销售排名，但存在错误。请找出并修正：\n\n```python\nproduct_sales = df.groupby('product_id')['sales'].sum().sort_values()\nprint('产品销售排名:')\nprint(product_sales.head(10))\n```",
+        "correctAnswer": "product_sales = df.groupby('product_id')['sales'].sum().sort_values(ascending=False)",
+        "explanation": "sort_values()默认按升序排列，需要设置ascending=False以按降序排列，这样head(10)才能显示销售排名前10的产品。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现某个产品的销售额在最近三个月持续下降，作为数据分析师，你应该首先做什么？",
+        "options": [
+          "建议停止销售该产品",
+          "分析该产品的销售趋势和市场竞争情况",
+          "建议降低该产品的价格",
+          "建议增加该产品的营销投入"
+        ],
+        "correctAnswer": 1,
+        "explanation": "在采取任何行动之前，首先应该分析该产品的销售趋势和市场竞争情况，找出销售额下降的原因，然后再制定相应的策略。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析销售数据后，你发现以下结果：\n- 线上销售额占总销售额的60%，且同比增长20%\n- 线下销售额占总销售额的40%，且同比增长5%\n\n这说明什么？",
+        "options": [
+          "线上销售增长迅速，应该加大线上渠道投入",
+          "线下销售增长缓慢，需要优化线下体验",
+          "应该整合线上线下销售渠道",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "线上销售增长迅速，应该加大线上渠道投入；线下销售增长缓慢，需要优化线下体验；同时应该整合线上线下销售渠道，提供全渠道购物体验。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在分析销售数据时，使用pandas的resample和groupby有什么区别？",
+        "options": [
+          "resample专门用于时间序列数据，groupby可以用于任何数据",
+          "resample只能按时间频率聚合，groupby可以按任何列聚合",
+          "resample返回的结果索引是时间类型，groupby返回的结果索引是分组列的值",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "resample专门用于时间序列数据，按时间频率聚合，返回的结果索引是时间类型。groupby可以用于任何数据，按任何列聚合，返回的结果索引是分组列的值。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 4,
+    "projectTitle": "库存优化分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "库存周转率的计算公式是什么？",
+        "options": [
+          "销售额 / 平均库存",
+          "平均库存 / 销售额",
+          "销售成本 / 平均库存",
+          "平均库存 / 销售成本"
+        ],
+        "correctAnswer": 2,
+        "explanation": "库存周转率的正确计算公式是：库存周转率 = 销售成本 / 平均库存。这个指标衡量了企业在一定时期内库存的周转次数，反映了库存管理的效率。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算库存周转率，但存在错误。请找出并修正：\n\n```python\ndf['inventory_turnover'] = df['sales'] / df['average_inventory']\nprint(df['inventory_turnover'].head())\n```",
+        "correctAnswer": "df['inventory_turnover'] = df['cost_of_goods_sold'] / df['average_inventory']",
+        "explanation": "库存周转率应该使用销售成本（cost_of_goods_sold）而不是销售额（sales）来计算，这样更准确地反映了库存的实际周转情况。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现某个产品的库存周转率非常低（<1），作为数据分析师，你应该建议什么？",
+        "options": [
+          "增加该产品的库存水平",
+          "减少该产品的库存水平，避免积压",
+          "分析该产品的销售趋势，考虑是否继续销售",
+          "B和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "库存周转率低表明库存积压严重，应该减少库存水平，避免积压；同时分析该产品的销售趋势，考虑是否继续销售该产品。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析库存数据后，你发现以下结果：\n- 产品A的库存周转率为0.5\n- 产品B的库存周转率为2.5\n- 产品C的库存周转率为5.0\n\n这说明什么？",
+        "options": [
+          "产品A库存积压严重，产品C库存管理效率高",
+          "产品A销售缓慢，产品C销售快速",
+          "应该减少产品A的库存，增加产品C的库存",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "库存周转率越低，说明库存积压越严重，销售越缓慢；库存周转率越高，说明库存管理效率越高，销售越快速。因此应该减少产品A的库存，增加产品C的库存。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在库存分析中，安全库存和经济订货批量（EOQ）有什么区别？",
+        "options": [
+          "安全库存是为了应对需求波动而持有的额外库存，EOQ是最优的订货数量",
+          "安全库存是最小库存水平，EOQ是最大库存水平",
+          "安全库存考虑了缺货成本，EOQ考虑了订货成本和持有成本",
+          "A和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "安全库存是为了应对需求波动和供应不确定性而持有的额外库存，考虑了缺货成本。经济订货批量（EOQ）是使总库存成本（订货成本+持有成本）最小的订货数量。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种方法最适合计算安全库存？",
+        "options": [
+          "安全库存 = 日平均需求 × 提前期",
+          "安全库存 = 日需求标准差 × 服务水平因子 × 提前期平方根",
+          "安全库存 = 最大日需求 × 最大提前期",
+          "安全库存 = （最大日需求 - 平均日需求）× 提前期"
+        ],
+        "correctAnswer": 1,
+        "explanation": "安全库存的计算公式通常为：安全库存 = 日需求标准差 × 服务水平因子 × 提前期平方根。这个公式考虑了需求波动、服务水平和提前期等因素。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于计算安全库存，但存在错误。请找出并修正：\n\n```python\ndf['safety_stock'] = df['daily_demand'] * 1.645  # 95% 置信水平\nprint(df['safety_stock'].head())\n```",
+        "correctAnswer": "df['safety_stock'] = df['daily_demand_std'] * 1.645 * (df['lead_time'] ** 0.5)",
+        "explanation": "安全库存应该考虑日需求标准差、服务水平因子（1.645对应95%置信水平）和提前期的平方根，这样才能更准确地应对需求波动和供应不确定性。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现库存短缺导致的损失很大，作为数据分析师，你应该建议什么？",
+        "options": [
+          "增加所有产品的安全库存",
+          "分析库存短缺的原因，针对不同产品制定不同的库存策略",
+          "优化供应链管理，减少提前期",
+          "B和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "库存短缺可能由多种原因导致，应该分析具体原因，针对不同产品制定不同的库存策略；同时优化供应链管理，减少提前期，提高供应链的可靠性。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析库存数据后，你发现以下结果：\n- 产品A的库存短缺天数为10天，损失销售额10000元\n- 产品B的库存短缺天数为2天，损失销售额5000元\n- 产品C的库存短缺天数为0天\n\n这说明什么？",
+        "options": [
+          "产品A的库存管理问题最严重",
+          "产品B的单位短缺损失更高",
+          "应该重点关注产品A和产品B的库存管理",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "产品A的库存短缺天数最长，损失销售额最多，说明库存管理问题最严重。产品B虽然短缺天数短，但单位短缺损失（5000元/2天=2500元/天）高于产品A（10000元/10天=1000元/天）。因此应该重点关注产品A和产品B的库存管理。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在库存分析中，使用pandas的groupby和pivot_table分析不同产品类别的库存周转率有什么区别？",
+        "options": [
+          "groupby返回Series，pivot_table返回DataFrame",
+          "groupby更简单，pivot_table更灵活",
+          "pivot_table可以同时分析多个维度",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "groupby返回Series，更简单直接；pivot_table返回DataFrame，更灵活，可以同时分析多个维度。两者都可以用于分析不同产品类别的库存周转率。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 5,
+    "projectTitle": "用户流失分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "用户流失率的计算公式是什么？",
+        "options": [
+          "流失用户数 / 总用户数",
+          "流失用户数 / 活跃用户数",
+          "（总用户数 - 留存用户数）/ 总用户数",
+          "A和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "用户流失率的计算公式为：流失用户数 / 总用户数 或 （总用户数 - 留存用户数）/ 总用户数。这两个公式是等价的。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算用户流失率，但存在错误。请找出并修正：\n\n```python\nchurn_rate = df['churn'].sum() / len(df)\nprint(f'用户流失率: {churn_rate:.2f}')\n```",
+        "correctAnswer": "churn_rate = df['churn'].mean()",
+        "explanation": "如果churn列是0-1编码（1表示流失，0表示留存），那么直接使用mean()就可以计算流失率，因为mean()会计算1的比例。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现用户流失率很高，作为数据分析师，你应该首先做什么？",
+        "options": [
+          "分析流失用户的特征和行为",
+          "实施用户留存计划",
+          "优化产品功能",
+          "降低产品价格"
+        ],
+        "correctAnswer": 0,
+        "explanation": "在采取任何行动之前，首先应该分析流失用户的特征和行为，找出流失的原因，然后再制定相应的留存策略。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析用户流失数据后，你发现以下结果：\n- 月度消费超过100元的用户流失率为10%\n- 月度消费低于100元的用户流失率为30%\n\n这说明什么？",
+        "options": [
+          "高消费用户的留存率更高",
+          "应该重点关注低消费用户的留存",
+          "可以通过提高低消费用户的消费金额来降低流失率",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "高消费用户的流失率低，说明他们的留存率更高；低消费用户的流失率高，应该重点关注他们的留存；同时可以通过提高低消费用户的消费金额来降低整体流失率。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在用户流失分析中，使用相关性分析和决策树有什么区别？",
+        "options": [
+          "相关性分析可以识别变量之间的线性关系，决策树可以识别非线性关系",
+          "相关性分析只能分析数值型变量，决策树可以分析分类变量",
+          "决策树可以提供更直观的特征重要性排序",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "相关性分析主要识别变量之间的线性关系，适用于数值型变量。决策树可以识别非线性关系，适用于分类变量，并且可以提供直观的特征重要性排序。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种用户特征最可能导致流失？",
+        "options": [
+          "使用时长超过1年",
+          "使用时长少于3个月",
+          "每月登录次数超过10次",
+          "订阅了多个服务"
+        ],
+        "correctAnswer": 1,
+        "explanation": "使用时长少于3个月的用户通常还没有形成使用习惯，对产品的忠诚度较低，因此流失率较高。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析用户使用时长与流失的关系，但存在错误。请找出并修正：\n\n```python\ndf['tenure_group'] = pd.cut(df['tenure'], bins=[0, 6, 12, 24, 36, 60], labels=['0-6个月', '6-12个月', '1-2年', '2-3年', '3年以上'])\ntenure_churn = df.groupby('tenure_group')['churn'].sum()\nprint('\n不同使用时长的流失率:')\nprint(tenure_churn)\n```",
+        "correctAnswer": "tenure_churn = df.groupby('tenure_group')['churn'].mean()",
+        "explanation": "要计算不同使用时长的流失率，应该使用mean()而不是sum()，因为mean()会计算每个组的流失比例。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现使用时长少于6个月且月度消费高于平均值的用户流失率很高，作为数据分析师，你应该建议什么？",
+        "options": [
+          "为这些用户提供个性化的入门指导",
+          "为这些用户提供专属优惠",
+          "分析他们的使用行为，找出流失原因",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "对于高风险用户（使用时长短且消费高），应该采取综合措施：提供个性化的入门指导、专属优惠，并分析他们的使用行为找出流失原因。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析用户流失数据后，你发现以下结果：\n- 合约用户的流失率为5%\n- 月度付费用户的流失率为25%\n- 免费用户的流失率为40%\n\n这说明什么？",
+        "options": [
+          "合约可以显著降低用户流失率",
+          "付费用户的流失率低于免费用户",
+          "应该鼓励用户签订长期合约",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "合约用户的流失率最低，说明合约可以显著降低用户流失率；付费用户的流失率低于免费用户，说明付费行为可以提高用户忠诚度；因此应该鼓励用户签订长期合约。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在用户流失分析中，使用pandas的cut和qcut函数有什么区别？",
+        "options": [
+          "cut按固定间隔划分数据，qcut按分位数划分数据",
+          "cut返回的区间长度相同，qcut返回的区间包含相同数量的样本",
+          "cut适用于均匀分布的数据，qcut适用于不均匀分布的数据",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "cut按固定间隔划分数据，返回的区间长度相同，适用于均匀分布的数据。qcut按分位数划分数据，返回的区间包含相同数量的样本，适用于不均匀分布的数据。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 6,
+    "projectTitle": "市场趋势分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "市场增长率的计算公式是什么？",
+        "options": [
+          "（当期市场规模 - 上期市场规模）/ 上期市场规模 × 100%",
+          "（当期市场规模 - 上期市场规模）/ 当期市场规模 × 100%",
+          "当期市场规模 / 上期市场规模 × 100%",
+          "上期市场规模 / 当期市场规模 × 100%"
+        ],
+        "correctAnswer": 0,
+        "explanation": "市场增长率的计算公式为：（当期市场规模 - 上期市场规模）/ 上期市场规模 × 100%。这个公式衡量了市场规模的变化速度。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算市场增长率，但存在错误。请找出并修正：\n\n```python\ndf['market_growth_rate'] = (df['market_size'] - df['market_size'].shift(1)) / df['market_size'] * 100\nprint(df['market_growth_rate'].head())\n```",
+        "correctAnswer": "df['market_growth_rate'] = (df['market_size'] - df['market_size'].shift(1)) / df['market_size'].shift(1) * 100",
+        "explanation": "市场增长率应该以上期市场规模为分母，而不是当期市场规模。使用shift(1)可以获取上期的市场规模。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现市场增长率在最近几个季度持续下降，作为数据分析师，你应该首先做什么？",
+        "options": [
+          "分析市场竞争格局的变化",
+          "分析消费者需求的变化",
+          "分析宏观经济环境的变化",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "市场增长率下降可能由多种因素导致，应该综合分析市场竞争格局、消费者需求和宏观经济环境的变化，找出具体原因。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析市场趋势数据后，你发现以下结果：\n- 2023年Q1市场规模为1000万元，增长率为5%\n- 2023年Q2市场规模为1050万元，增长率为5%\n- 2023年Q3市场规模为1080万元，增长率为2.86%\n- 2023年Q4市场规模为1100万元，增长率为1.85%\n\n这说明什么？",
+        "options": [
+          "市场规模持续增长，但增长速度放缓",
+          "市场可能已经进入成熟期",
+          "应该寻找新的市场增长点",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "市场规模从1000万元增长到1100万元，说明市场持续增长；但增长率从5%下降到1.85%，说明增长速度放缓。这可能意味着市场已经进入成熟期，需要寻找新的增长点。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在市场趋势分析中，使用时间序列分析和回归分析有什么区别？",
+        "options": [
+          "时间序列分析关注数据随时间的变化，回归分析关注变量之间的关系",
+          "时间序列分析适用于预测，回归分析适用于解释",
+          "时间序列分析考虑数据的时间依赖性，回归分析不考虑",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "时间序列分析关注数据随时间的变化，考虑数据的时间依赖性，适用于预测。回归分析关注变量之间的关系，不考虑时间依赖性，适用于解释。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种方法最适合分析市场份额的变化？",
+        "options": [
+          "使用pandas的groupby和sum计算各竞争对手的销售额",
+          "使用pandas的pivot_table分析不同时期的市场份额",
+          "使用matplotlib绘制市场份额的时间趋势图",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "分析市场份额的变化需要综合使用多种方法：计算各竞争对手的销售额、分析不同时期的市场份额、绘制市场份额的时间趋势图等。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析市场份额，但存在错误。请找出并修正：\n\n```python\nmarket_share = df.groupby('competitor')['sales'].sum() / df['sales'].sum()\nprint('市场份额:')\nprint(market_share.sort_values(ascending=False))\n```",
+        "correctAnswer": "market_share = df.groupby('competitor')['sales'].sum() / df['sales'].sum() * 100",
+        "explanation": "市场份额通常以百分比表示，因此需要乘以100。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现某个竞争对手的市场份额在最近一年增长了10个百分点，作为数据分析师，你应该建议什么？",
+        "options": [
+          "分析该竞争对手的策略和优势",
+          "调整公司的市场策略",
+          "加强产品创新和差异化",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "竞争对手市场份额的显著增长说明他们可能采取了有效的策略，应该分析他们的策略和优势，调整公司的市场策略，加强产品创新和差异化，以应对竞争。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析市场趋势数据后，你发现以下结果：\n- 产品类别A的销售额占比从30%增长到40%\n- 产品类别B的销售额占比从25%下降到15%\n- 产品类别C的销售额占比保持在20%不变\n\n这说明什么？",
+        "options": [
+          "产品类别A是增长最快的市场 segment",
+          "产品类别B可能正在衰退",
+          "应该增加产品类别A的投入，减少产品类别B的投入",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "产品类别A的销售额占比增长了10个百分点，说明它是增长最快的市场segment；产品类别B的销售额占比下降了10个百分点，说明它可能正在衰退；因此应该增加产品类别A的投入，减少产品类别B的投入。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在市场趋势分析中，使用pandas的resample和groupby分析时间序列数据有什么区别？",
+        "options": [
+          "resample专门用于时间序列数据，groupby可以用于任何数据",
+          "resample按时间频率聚合，groupby按指定列聚合",
+          "resample返回的结果索引是时间类型，groupby返回的结果索引是分组列的值",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "resample专门用于时间序列数据，按时间频率聚合，返回的结果索引是时间类型。groupby可以用于任何数据，按指定列聚合，返回的结果索引是分组列的值。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 7,
+    "projectTitle": "财务数据分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "流动比率的计算公式是什么？",
+        "options": [
+          "流动资产 / 流动负债",
+          "流动负债 / 流动资产",
+          "（流动资产 - 存货）/ 流动负债",
+          "流动资产 / 总资产"
+        ],
+        "correctAnswer": 0,
+        "explanation": "流动比率的计算公式为：流动资产 / 流动负债。这个指标衡量了企业短期偿债能力，一般认为流动比率大于1表明企业有足够的流动资产偿还短期债务。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算流动比率，但存在错误。请找出并修正：\n\n```python\ndf['current_ratio'] = df['current_liabilities'] / df['current_assets']\nprint(df['current_ratio'].head())\n```",
+        "correctAnswer": "df['current_ratio'] = df['current_assets'] / df['current_liabilities']",
+        "explanation": "流动比率应该是流动资产除以流动负债，而不是流动负债除以流动资产。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现企业的流动比率为0.8，作为数据分析师，你应该建议什么？",
+        "options": [
+          "企业短期偿债能力不足，应该增加流动资产或减少流动负债",
+          "企业短期偿债能力良好，无需担心",
+          "应该分析流动比率低的原因，如存货过多或应收账款周转缓慢",
+          "A和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "流动比率为0.8低于1，表明企业短期偿债能力不足。应该分析流动比率低的原因，如存货过多或应收账款周转缓慢，并采取相应措施增加流动资产或减少流动负债。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析财务数据后，你发现以下结果：\n- 2022年流动比率为1.2\n- 2023年流动比率为1.5\n- 行业平均流动比率为1.3\n\n这说明什么？",
+        "options": [
+          "企业的短期偿债能力正在改善",
+          "企业的短期偿债能力高于行业平均水平",
+          "企业的流动资产管理效率可能有所提高",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "流动比率从1.2上升到1.5，说明企业的短期偿债能力正在改善；1.5高于行业平均水平1.3，说明企业的短期偿债能力高于行业平均水平；流动比率的提高可能意味着企业的流动资产管理效率有所提高。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在财务数据分析中，使用比率分析和趋势分析有什么区别？",
+        "options": [
+          "比率分析关注不同财务指标之间的关系，趋势分析关注同一指标随时间的变化",
+          "比率分析适用于横向比较，趋势分析适用于纵向比较",
+          "比率分析可以评估企业的财务状况，趋势分析可以评估企业的发展趋势",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "比率分析关注不同财务指标之间的关系，适用于横向比较（与同行业企业比较），可以评估企业的财务状况。趋势分析关注同一指标随时间的变化，适用于纵向比较（与企业历史数据比较），可以评估企业的发展趋势。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种财务比率最能反映企业的盈利能力？",
+        "options": [
+          "流动比率",
+          "资产负债率",
+          "利润率",
+          "存货周转率"
+        ],
+        "correctAnswer": 2,
+        "explanation": "利润率（如净利润率、毛利率）直接反映了企业的盈利能力，流动比率反映短期偿债能力，资产负债率反映长期偿债能力，存货周转率反映运营效率。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于计算利润率，但存在错误。请找出并修正：\n\n```python\ndf['profit_margin'] = df['revenue'] / df['net_income'] * 100\nprint(df['profit_margin'].head())\n```",
+        "correctAnswer": "df['profit_margin'] = df['net_income'] / df['revenue'] * 100",
+        "explanation": "利润率应该是净利润除以收入，而不是收入除以净利润。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现企业的资产负债率为70%，高于行业平均水平50%，作为数据分析师，你应该建议什么？",
+        "options": [
+          "企业负债过高，应该降低负债水平",
+          "分析负债结构，优化债务期限",
+          "提高盈利能力，增加自有资金",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "资产负债率70%高于行业平均水平50%，说明企业负债过高，财务风险较大。应该采取综合措施：降低负债水平、优化债务期限、提高盈利能力增加自有资金。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析财务数据后，你发现以下结果：\n- 2022年资产负债率为60%\n- 2023年资产负债率为50%\n- 利息保障倍数从3倍上升到5倍\n\n这说明什么？",
+        "options": [
+          "企业的财务风险正在降低",
+          "企业的偿债能力正在提高",
+          "企业的盈利能力可能有所提升",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "资产负债率从60%下降到50%，说明企业的负债水平降低，财务风险降低；利息保障倍数从3倍上升到5倍，说明企业的偿债能力提高；利息保障倍数的提高可能意味着企业的盈利能力有所提升。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在财务数据分析中，使用pandas的corr和cov函数有什么区别？",
+        "options": [
+          "corr计算相关系数，cov计算协方差",
+          "corr的结果在-1到1之间，cov的结果没有范围限制",
+          "corr消除了量纲的影响，cov保留了量纲的影响",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "corr计算的是相关系数，结果在-1到1之间，消除了量纲的影响，用于衡量两个变量之间的线性关系强度。cov计算的是协方差，结果没有范围限制，保留了量纲的影响，用于衡量两个变量的共同变化程度。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 8,
+    "projectTitle": "社交媒体数据分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "社交媒体Engagement率的计算公式是什么？",
+        "options": [
+          "（点赞 + 评论 + 分享）/ 浏览量 × 100%",
+          "（点赞 + 评论 + 分享）/ 粉丝数 × 100%",
+          "浏览量 / （点赞 + 评论 + 分享）× 100%",
+          "粉丝数 / （点赞 + 评论 + 分享）× 100%"
+        ],
+        "correctAnswer": 0,
+        "explanation": "社交媒体Engagement率的计算公式为：（点赞 + 评论 + 分享）/ 浏览量 × 100%。这个指标衡量了内容的互动程度，反映了用户对内容的兴趣和参与度。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算Engagement率，但存在错误。请找出并修正：\n\n```python\ndf['engagement_rate'] = (df['likes'] + df['comments'] + df['shares']) / df['followers'] * 100\nprint(df['engagement_rate'].head())\n```",
+        "correctAnswer": "df['engagement_rate'] = (df['likes'] + df['comments'] + df['shares']) / df['impressions'] * 100",
+        "explanation": "Engagement率应该使用浏览量（impressions）作为分母，而不是粉丝数（followers）。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现社交媒体内容的Engagement率持续下降，作为数据分析师，你应该首先做什么？",
+        "options": [
+          "分析不同类型内容的Engagement率",
+          "分析发布时间对Engagement率的影响",
+          "分析受众特征的变化",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Engagement率下降可能由多种因素导致，应该综合分析不同类型内容的Engagement率、发布时间的影响以及受众特征的变化，找出具体原因。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析社交媒体数据后，你发现以下结果：\n- 视频内容的平均Engagement率为5%\n- 图片内容的平均Engagement率为3%\n- 文字内容的平均Engagement率为1%\n\n这说明什么？",
+        "options": [
+          "视频内容的互动效果最好",
+          "应该增加视频内容的比例",
+          "文字内容的互动效果最差",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "视频内容的Engagement率最高，说明其互动效果最好；文字内容的Engagement率最低，说明其互动效果最差；因此应该增加视频内容的比例，提高整体Engagement率。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在社交媒体数据分析中，使用描述性统计和趋势分析有什么区别？",
+        "options": [
+          "描述性统计总结数据的基本特征，趋势分析分析数据随时间的变化",
+          "描述性统计适用于静态分析，趋势分析适用于动态分析",
+          "描述性统计可以了解当前状态，趋势分析可以预测未来发展",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "描述性统计（如均值、中位数、标准差）总结数据的基本特征，适用于静态分析，可以了解当前状态。趋势分析分析数据随时间的变化，适用于动态分析，可以预测未来发展。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种发布时间最可能获得较高的Engagement率？",
+        "options": [
+          "工作日上午9点",
+          "工作日中午12点",
+          "工作日晚上8点",
+          "周末上午10点"
+        ],
+        "correctAnswer": 2,
+        "explanation": "根据社交媒体使用习惯，工作日晚上8点是用户休闲时间，使用社交媒体的频率较高，因此发布内容最可能获得较高的Engagement率。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析最佳发布时间，但存在错误。请找出并修正：\n\n```python\ndf['hour'] = df['date'].dt.hour\nhourly_engagement = df.groupby('hour')['engagement_rate'].sum()\nprint('不同发布时间的平均engagement率:')\nprint(hourly_engagement)\n```",
+        "correctAnswer": "hourly_engagement = df.groupby('hour')['engagement_rate'].mean()",
+        "explanation": "要计算不同发布时间的平均Engagement率，应该使用mean()而不是sum()，因为mean()会计算每个小时的平均Engagement率。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现某个受众群体的Engagement率特别高，作为数据分析师，你应该建议什么？",
+        "options": [
+          "针对该受众群体创建更多个性化内容",
+          "分析该受众群体的特征和偏好",
+          "调整发布时间以更好地触达该受众群体",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "对于Engagement率高的受众群体，应该采取综合措施：创建更多个性化内容、分析其特征和偏好、调整发布时间以更好地触达他们，从而提高整体Engagement率。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析社交媒体数据后，你发现以下结果：\n- 周一到周五的平均Engagement率为3%\n- 周末的平均Engagement率为5%\n\n这说明什么？",
+        "options": [
+          "用户在周末有更多时间互动",
+          "应该在周末发布更多重要内容",
+          "周末是社交媒体营销的黄金时期",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "周末的Engagement率高于工作日，说明用户在周末有更多时间互动，因此应该在周末发布更多重要内容，充分利用这一黄金营销时期。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在社交媒体数据分析中，使用pandas的groupby和pivot_table分析不同内容类型的Engagement率有什么区别？",
+        "options": [
+          "groupby返回Series，pivot_table返回DataFrame",
+          "groupby更简单，pivot_table更灵活",
+          "pivot_table可以同时分析多个维度",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "groupby返回Series，更简单直接；pivot_table返回DataFrame，更灵活，可以同时分析多个维度。两者都可以用于分析不同内容类型的Engagement率。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 9,
+    "projectTitle": "供应链数据分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "供应链前置时间（Lead Time）的定义是什么？",
+        "options": [
+          "从订单发出到订单完成的时间",
+          "从订单发出到货物交付的时间",
+          "从货物生产到货物交付的时间",
+          "从订单接收��订单完成的时间"
+        ],
+        "correctAnswer": 1,
+        "explanation": "供应链前置时间（Lead Time）是指从订单发出到货物交付的时间，包括订单处理、生产、运输等环节的时间总和。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算前置时间，但存在错误。请找出并修正：\n\n```python\ndf['lead_time'] = (pd.to_datetime(df['order_date']) - pd.to_datetime(df['delivery_date'])).dt.days\nprint(df['lead_time'].head())\n```",
+        "correctAnswer": "df['lead_time'] = (pd.to_datetime(df['delivery_date']) - pd.to_datetime(df['order_date'])).dt.days",
+        "explanation": "前置时间应该是从订单日期到交付日期的时间差，而不是从交付日期到订单日期的时间差。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现某个供应商的按时交付率只有70%，作为数据分析师，你应该建议什么？",
+        "options": [
+          "终止与该供应商的合作",
+          "分析该供应商延迟交付的原因",
+          "与该供应商协商改进措施",
+          "B和C都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "按时交付率低可能由多种原因导致，应该首先分析原因，然后与供应商协商改进措施，而不是立即终止合作。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析供应链数据后，你发现以下结果：\n- 供应商A的按时交付率为95%，平均前置时间为5天\n- 供应商B的按时交付率为80%，平均前置时间为3天\n- 供应商C的按时交付率为90%，平均前置时间为4天\n\n哪个供应商的表现最好？",
+        "options": [
+          "供应商A",
+          "供应商B",
+          "供应商C",
+          "无法确定"
+        ],
+        "correctAnswer": 0,
+        "explanation": "供应商A的按时交付率最高（95%），虽然前置时间不是最短的，但按时交付率是供应链可靠性的重要指标，因此供应商A的表现最好。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在供应链数据分析中，使用描述性统计和 inferential 统计有什么区别？",
+        "options": [
+          "描述性统计总结数据的基本特征，inferential统计基于样本推断总体",
+          "描述性统计适用于小样本，inferential统计适用于大样本",
+          "描述性统计可以发现数据模式，inferential统计可以验证假设",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "描述性统计（如均值、中位数、标准差）总结数据的基本特征，适用于发现数据模式。inferential统计基于样本数据推断总体特征，适用于验证假设。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种方法最适合优化供应链成本？",
+        "options": [
+          "降低所有供应商的价格",
+          "分析成本结构，识别主要成本驱动因素",
+          "减少库存水平",
+          "缩短前置时间"
+        ],
+        "correctAnswer": 1,
+        "explanation": "优化供应链成本的最佳方法是分析成本结构，识别主要成本驱动因素，然后针对性地采取措施。降低所有供应商的价格可能会影响质量，减少库存水平可能导致缺货，缩短前置时间可能增加成本。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析供应商表现，但存在错误。请找出并修正：\n\n```python\nsupplier_performance = df.groupby('supplier')['on_time_delivery'].sum()\nprint('供应商按时交付率:')\nprint(supplier_performance)\n```",
+        "correctAnswer": "supplier_performance = df.groupby('supplier')['on_time_delivery'].mean() * 100",
+        "explanation": "要计算供应商的按时交付率，应该使用mean()计算平均值，然后乘以100转换为百分比。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现供应链成本在最近一年上升了20%，作为数据分析师，你应该建议什么？",
+        "options": [
+          "分析成本上升的原因",
+          "寻找更具成本效益的供应商",
+          "优化库存管理，减少库存持有成本",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "供应链成本上升可能由多种原因导致，应该采取综合措施：分析成本上升的原因、寻找更具成本效益的供应商、优化库存管理减少库存持有成本。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析供应链数据后，你发现以下结果：\n- 运输成本占总供应链成本的40%\n- 采购成本占总供应链成本的30%\n- 库存持有成本占总供应链成本的20%\n- 其他成本占总供应链成本的10%\n\n这说明什么？",
+        "options": [
+          "运输成本是主要的成本驱动因素",
+          "应该重点优化运输成本",
+          "可以通过优化运输路线和模式来降低成本",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "运输成本占总供应链成本的40%，是主要的成本驱动因素，因此应该重点优化运输成本，可以通过优化运输路线和模式来降低成本。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在供应链数据分析中，使用pandas的groupby和agg函数与直接使用mean函数有什么区别？",
+        "options": [
+          "groupby+agg可以同时计算多个聚合函数，mean只能计算均值",
+          "groupby+agg更灵活，mean更简单",
+          "groupby+agg适用于多维度分析，mean适用于单维度分析",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "groupby+agg的优势在于可以同时计算多个聚合函数（如均值、标准差、总和等），更灵活，适用于多维度分析。mean函数只能计算均值，更简单，适用于单维度分析。",
+        "score": 10
+      }
+    ]
+  },
+  {
+    "projectId": 10,
+    "projectTitle": "医疗数据分析",
+    "questions": [
+      {
+        "id": 1,
+        "type": "multiple-choice",
+        "content": "住院天数（Length of Stay）的计算公式是什么？",
+        "options": [
+          "出院日期 - 入院日期",
+          "入院日期 - 出院日期",
+          "（出院日期 - 入院日期）的天数",
+          "（入院日期 - 出院日期）的天数"
+        ],
+        "correctAnswer": 2,
+        "explanation": "住院天数的计算公式为：（出院日期 - 入院日期）的天数。这个指标衡量了患者在医院的平均停留时间，是医疗资源利用效率的重要指标。",
+        "score": 10
+      },
+      {
+        "id": 2,
+        "type": "code-correction",
+        "content": "以下代码用于计算住院天数，但存在错误。请找出并修正：\n\n```python\ndf['length_of_stay'] = (pd.to_datetime(df['admission_date']) - pd.to_datetime(df['discharge_date'])).dt.days\nprint(df['length_of_stay'].head())\n```",
+        "correctAnswer": "df['length_of_stay'] = (pd.to_datetime(df['discharge_date']) - pd.to_datetime(df['admission_date'])).dt.days",
+        "explanation": "住院天数应该是出院日期减去入院日期的天数，而不是入院日期减去出院日期的天数。",
+        "score": 10
+      },
+      {
+        "id": 3,
+        "type": "scenario-decision",
+        "content": "你发现某个医院的平均住院天数比行业平均水平高20%，作为数据分析师，你应该建议什么？",
+        "options": [
+          "分析住院天数高的原因",
+          "优化医院流程，减少不必要的住院时间",
+          "分析不同科室的住院天数，识别问题科室",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "住院天数高可能由多种原因导致，应该采取综合措施：分析住院天数高的原因、优化医院流程减少不必要的住院时间、分析不同科室的住院天数识别问题科室。",
+        "score": 10
+      },
+      {
+        "id": 4,
+        "type": "result-interpretation",
+        "content": "分析医疗数据后，你发现以下结果：\n- 科室A的平均住院天数为3天\n- 科室B的平均住院天数为5天\n- 科室C的平均住院天数为7天\n\n这说明什么？",
+        "options": [
+          "科室A的医疗效率最高",
+          "科室C的患者病情可能更严重",
+          "应该分析科室C的住院流程，寻找优化空间",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "科室A的平均住院天数最短，说明其医疗效率最高；科室C的平均住院天数最长，可能是因为患者病情更严重，也可能是因为流程存在优化空间，应该进一步分析。",
+        "score": 10
+      },
+      {
+        "id": 5,
+        "type": "method-comparison",
+        "content": "在医疗数据分析中，使用描述性统计和预测性分析有什么区别？",
+        "options": [
+          "描述性统计总结数据的基本特征，预测性分析预测未来结果",
+          "描述性统计适用于了解现状，预测性分析适用于规划未来",
+          "描述性统计可以发现数据模式，预测性分析可以建立预测模型",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "描述性统计（如均值、中位数、标准差）总结数据的基本特征，适用于了解现状，发现数据模式。预测性分析（如回归分析、机器学习）预测未来结果，适用于规划未来，建立预测模型。",
+        "score": 10
+      },
+      {
+        "id": 6,
+        "type": "multiple-choice",
+        "content": "以下哪种方法最适合分析不同治疗方案的效果？",
+        "options": [
+          "分析不同治疗方案的治愈率",
+          "分析不同治疗方案的平均住院天数",
+          "分析不同治疗方案的患者满意度",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "分析不同治疗方案的效果应该综合考虑多个指标：治愈率、平均住院天数、患者满意度等，这样才能全面评估治疗方案的效果。",
+        "score": 10
+      },
+      {
+        "id": 7,
+        "type": "code-correction",
+        "content": "以下代码用于分析治疗效果，但存在错误。请找出并修正：\n\n```python\ntreatment_outcome = df.groupby('treatment')['outcome'].count()\nprint('不同治疗方案的效果:')\nprint(treatment_outcome)\n```",
+        "correctAnswer": "treatment_outcome = df.groupby('treatment')['outcome'].value_counts(normalize=True).unstack()",
+        "explanation": "要分析不同治疗方案的效果，应该使用value_counts(normalize=True)计算每种治疗方案的不同结果的比例，而不是简单地计数。",
+        "score": 10
+      },
+      {
+        "id": 8,
+        "type": "scenario-decision",
+        "content": "你发现某个治疗方案的治愈率较低，作为数据分析师，你应该建议什么？",
+        "options": [
+          "分析该治疗方案的适用人群",
+          "分析该治疗方案的实施过程",
+          "与医疗专家讨论改进方案",
+          "以上都是"
+        ],
+        "correctAnswer": 3,
+        "explanation": "治疗方案治愈率低可能由多种原因导致，应该采取综合措施：分析适用人群、分析实施过程、与医疗专家讨论改进方案。",
+        "score": 10
+      },
+      {
+        "id": 9,
+        "type": "result-interpretation",
+        "content": "分析医疗数据后，你发现以下结果：\n- 年龄在0-30岁的患者治愈率为90%\n- 年龄在31-60岁的患者治愈率为80%\n- 年龄在61-90岁的患者治愈率为70%\n\n这说明什么？",
+        "options": [
+          "年轻患者的治愈率更高",
+          "年龄可能是影响治疗效果的因素",
+          "应该针对不同年龄组制定个性化的治疗方案",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "年轻患者的治愈率最高，说明年龄可能是影响治疗效果的因素，因此应该针对不同年龄组制定个性化的治疗方案。",
+        "score": 10
+      },
+      {
+        "id": 10,
+        "type": "method-comparison",
+        "content": "在医疗数据分析中，使用pandas的cut和qcut函数分析年龄分布有什么区别？",
+        "options": [
+          "cut按固定间隔划分年龄，qcut按分位数划分年龄",
+          "cut返回的年龄组长度相同，qcut返回的年龄组包含相同数量的样本",
+          "cut适用于均匀分布的年龄数据，qcut适用于不均匀分布的年龄数据",
+          "以上都对"
+        ],
+        "correctAnswer": 3,
+        "explanation": "cut按固定间隔划分年龄，返回的年龄组长度相同，适用于均匀分布的年龄数据。qcut按分位数划分年龄，返回的年龄组包含相同数量的样本，适用于不均匀分布的年龄数据。",
+        "score": 10
+      }
+    ]
+  }
+]
